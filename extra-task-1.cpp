@@ -1,14 +1,14 @@
 #include <cmath>
 #include <float.h>
 #include <assert.h>
-
+//        Return the number of seconds later that a time in seconds
 double seconds_difference(double time_1, double time_2)
 {
 	assert(time_1 >= 0);
 	assert(time_2 >= 0);
 	return time_2 - time_1;
 }
-
+//        Return the number of hours later that a time in seconds
 double hours_difference(double time_1, double time_2)
 {
 	assert(time_1 >= 0);
@@ -30,7 +30,7 @@ int get_seconds(double time)
 {
 	return (int)floor(time) - get_hours(time) * 3600 - get_minutes(time) * 60;
 }
-
+//        Return the total number of hours in the specified number
 double to_float_hours(int hours, int minutes, int seconds)
 {
 	assert(hours >= 0);
@@ -38,13 +38,15 @@ double to_float_hours(int hours, int minutes, int seconds)
 	assert(seconds >= 0);
 	return hours + minutes / 60 + seconds / 3600;
 }
-
+//        hours is a number of hours since midnight. Return the
+//	      hour as seen on a 24 - hour clock
 double to_24_hour_clock(double hours)
 {
 	assert(hours >= 0);
 	return (int)floor(hours) % 24;
 }
-
+/*        Return time at UTC+0, where utc_offset is the number of hours away from
+UTC+0. */
 double time_to_utc(int utc_offset, double time)
 {
 	assert(time >= 0);
@@ -55,7 +57,7 @@ double time_to_utc(int utc_offset, double time)
 		time -= 24 * 3600;
 	return time / 3600;
 }
-
+//        Return UTC time in time zone utc_offset.
 double time_from_utc(int utc_offset, double time)
 {
 	assert(time >= 0);
