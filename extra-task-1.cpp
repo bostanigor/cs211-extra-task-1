@@ -18,17 +18,17 @@ double hours_difference(double time_1, double time_2)
 
 int get_hours(double time)
 {
-	return floor(time) / 3600;
+	return (int)floor(time) / 3600;
 }
 
 int get_minutes(double time)
 {
-	return floor(time) / 60 - get_hours(time) * 60;
+	return (int)floor(time) / 60 - get_hours(time) * 60;
 }
 
 int get_seconds(double time)
 {
-	return floor(time) - get_minutes(time) * 60;
+	return (int)floor(time) - get_hours(time) * 3600 - get_minutes(time) * 60;
 }
 
 double to_float_hours(int hours, int minutes, int seconds)
@@ -49,7 +49,9 @@ double time_to_utc(int utc_offset, double time)
 {
 	assert(time >= 0);
 	time -= utc_offset * 3600;
-	while (time >= 0)
+	if (time < 0)
+		time += 3600;
+	while (time = 0)
 		time -= 24 * 3600;
 	return time / 3600;
 }
@@ -58,7 +60,9 @@ double time_from_utc(int utc_offset, double time)
 {
 	assert(time >= 0);
 	time += utc_offset * 3600;
-	while (time >= 0)
+	if (time < 0)
+		time += 3600;
+	while (time = 0)
 		time -= 24 * 3600;
 	return time / 3600;
 }
@@ -87,6 +91,7 @@ int main()
 
 	assert(get_hours(3800) == 1);
 	assert(get_minutes(3800) == 3);
+	assert(get_seconds(3800) == 20);
 
 	assert(time_to_utc(+0, 12.0) - 12.0 <= DBL_EPSILON);
 	assert(time_to_utc(+1, 12.0) - 11.0 <= DBL_EPSILON);
@@ -94,4 +99,13 @@ int main()
 	assert(time_to_utc(-11, 18.0) - 5.0 <= DBL_EPSILON);
 	assert(time_to_utc(-1, 0.0) - 1.0 <= DBL_EPSILON);
 	assert(time_to_utc(-1, 23.0) - 0.0 <= DBL_EPSILON);
+
+	assert(time_from_utc(+0, 12.0) - 12.0 <= DBL_EPSILON);
+	assert(time_from_utc(+1, 12.0) - 13.0 <= DBL_EPSILON);
+	assert(time_from_utc(-1, 12.0) - 11.0 <= DBL_EPSILON);
+	assert(time_from_utc(+6, 6.0) - 12.0 <= DBL_EPSILON);
+	assert(time_from_utc(-7, 6.0) - 23.0 <= DBL_EPSILON);
+	assert(time_from_utc(-1, 0.0) - 23.0 <= DBL_EPSILON);
+	assert(time_from_utc(-1, 23.0) - 22.0 <= DBL_EPSILON);
+	assert(time_from_utc(+1, 23.0) - 0.0 <= DBL_EPSILON);
 }
